@@ -1,0 +1,45 @@
+{ "Instances": [
+    {
+	"Name": "NSDBP01-Spain",
+	"InsId": "i-7649f236",
+	"VolId": "vol-d1b12ed6",
+	"Type": "DB"
+    },
+    {
+	"Name": "NSWEBU01",
+	"InsId": "i-896a95ca",
+	"VolId": "vol-6d79eb66",
+	"Type": "WEB"
+    },
+    {
+	"Name": "NSWEBP01-Spain",
+	"InsId": "i-fa53e0ba",
+	"VolId": "vol-eecf5ce9",
+	"Type": "WEB"
+    },
+    {
+	"Name": "NSDBP03-UK",
+	"InsId": "i-839fb1c0",
+	"VolId": "vol-cd1325c6",
+	"Type": "DB"
+    },
+    {
+	"Name": "NSWEBP03-UK",
+	"InsId": "i-7a9fb139",
+	"VolId": "vol-99132592",
+	"Type": "WEB"
+    },
+    {	
+	"Name": "NSDBP04-France",
+	"InsId": "i-e9fbf8ab",
+	"VolId": "vol-2090a322",
+	"Type": "DB"
+    },
+    {
+	"Name": "NSDWeb04-France",
+	"InsId": "i-b4888bf6",
+	"VolId": "vol-bd9cafbf",
+	"Type": "WEB"
+    }
+  ]
+}

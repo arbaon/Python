@@ -1,0 +1,39 @@
+#!/bin/bash
+DB="Predict"
+TB="predict"
+USER="root"
+OUT="tmp_fix_output.csv"
+
+function convert {
+mysql -u$USER $DB -e "select concat_ws(',',id,dvn,KO,h_team,a_team) from $TB" | sed '1d' | while read line
+	do
+		ID=$(echo $line | cut -d ',' -f1)
+		KO=$(echo $line | cut -d ',' -f3)
+		LG=$(echo $line | cut -d ',' -f2)
+		tmpA=$(echo $line | cut -d ',' -f4)
+		tmpB=$(echo $line | cut -d ',' -f5)
+		TEAMA=$(./team_search $LG $tmpA)
+		TEAMB=$(./team_search $LG $tmpB)
+		if [ "$1" == "y" ]; then
+			if [ "$TEAMA" != "NULL" ] && [ "$TEAMB" != "NULL" ]; then
+				../compare.py $ID $KO $LG "$TEAMA" "$TEAMB" y
+			fi
+		fi
+		if [ "$2" == "y" ]; then
+			echo "$ID,$KO,$LG,$TEAMA,$TEAMB" >> $OUT
+		else
+			echo "$ID,$KO,$LG,$TEAMA,$TEAMB"
+		fi
+	done
+}
+echo 
+echo "---------------------------------------------------"
+echo "Check the following output matches the fixture list"
+echo "correct any team names / mistakes"
+echo "---------------------------------------------------"
+convert n
+echo 
+read -p "Do you want to output these fixtures (y/n) ?"
+if [ "$REPLY" == "y" ]; then convert n $REPLY; fi
+read -p "Do you want to import these fixtures (y/n) ? "
+if [ "$REPLY" == "y" ]; then convert $REPLY; fi

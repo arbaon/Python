@@ -1,0 +1,3 @@
+select * from predict_view where H > 1.4 and tot >=0 and KO > "2018-12-14" and A > (H+0.5) order by H,totpw,goalpw,fib;
+select * from predict_view where A > 1.4 and tot <=0 and KO > "2018-12-14" and H > (A+0.5) order by H,totpw,goalpw,fib;
+select * from predict_view where H > 1.7 and tot >0 and KO > "2018-12-14" and A > (H+1.5) order by totpw,goalpw,fib,H;

@@ -1,0 +1,39 @@
+SQLCOMM
+select 
+HGM.dv as Divn,
+HGM.t as Team,
+HGM.no as H_Games,
+if(HGM.hsh = 0,0,round(HGM.hsh/HGM.no)) as H_S,
+if(HGM.hst = 0,0,round(HGM.hst/HGM.no)) as H_ST,
+if(HGM.hgl = 0,0,HGM.hgl/HGM.no) as H_G,
+if(HGM.hsa = 0,0,round(HGM.hsa/HGM.no)) as H_SA,
+if(HGM.hsat = 0,0,round(HGM.hsat/HGM.no)) as H_STA,
+if(HGM.hgla = 0,0,HGM.hgla/HGM.no) as H_GA,
+AGM.no as A_Games,
+if(AGM.ash = 0,0,round(AGM.ash/AGM.no)) as A_S,
+if(AGM.ast = 0,0,round(AGM.ast/AGM.no)) as A_ST,
+if(AGM.agl = 0,0,AGM.agl/AGM.no) as A_G,
+if(AGM.asa = 0,0,round(AGM.asa/AGM.no)) as A_SA,
+if(AGM.asat = 0,0,round(AGM.asat/AGM.no)) as A_STA,
+if(AGM.agla = 0,0,AGM.agla/AGM.no) as A_GA
+from (
+select count(*) as no,
+any_value(Divn) as dv,
+H_Team as t,
+sum(H_S) as hsh,
+sum(H_T) as hst,
+sum(F) as hgl,
+sum(A_S) as hsa,
+sum(A_T) as hsat,
+sum(A) as hgla from `Teams`.`TEAMNAME` where H_Team="TEAMNAME" and (KO between 'YYYY-MM-DD' and 'YYYY-MM-TT') order by KO desc) as HGM
+left join (
+select count(*) as no,
+any_value(Divn) as dv,
+A_Team as t,
+sum(A_S) as ash,
+sum(A_T) as ast,
+sum(A) as agl,
+sum(H_S) as asa,
+sum(H_T) as asat,
+sum(F) as agla from `Teams`.`TEAMNAME` where A_Team="TEAMNAME" and (KO between 'YYYY-MM-DD' and 'YYYY-MM-TT') order by KO desc) as AGM
+on HGM.t = AGM.t;

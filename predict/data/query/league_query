@@ -1,0 +1,44 @@
+SQLCOMM
+select 
+hgames.dv as "Dvn",
+hgames.t as "Team",
+hgames.p as "H_P",
+hgames.w as "H_W",
+hgames.d as "H_D",
+hgames.l as "H_L",
+hgames.hgf as "H_F",
+hgames.hga as "H_A",
+hgames.hgf - hgames.hga as "HGD",
+(hgames.w*3)+hgames.d as "HPS",
+agames.p as "A_P",
+agames.w as "A_W",
+agames.d as "A_D",
+agames.l as "A_L",
+agames.agf as "A_F",
+agames.aga as "A_A",
+agames.agf - agames.aga as "AGD",
+(agames.w*3)+agames.d as "APS",
+(hgames.hgf - hgames.hga)+(agames.agf - agames.aga) as GD,
+((hgames.w+agames.w) *3)+(hgames.d+agames.d) as "PTS",
+0 as Pos 
+from 
+(select 
+any_value(Divn) as dv, 
+H_Team as t, 
+sum(F) as "hgf",
+sum(A) as "hga", 
+count(R) as "p", 
+sum(if(R = "A",1,0)) as "l", 
+sum(if(R = "D",1,0)) as "d", 
+sum(if(R = "H",1,0)) as "w" 
+from `Teams`.`TEAMNAME` where H_Team="TEAMNAME" and (KO between 'YYYY-MM-DD' and 'YYYY-MM-TT') ) as hgames 
+left join (select 
+any_value(Divn) as dv,
+A_Team as t,
+sum(F) as "aga",
+sum(A) as "agf", 
+count(R) as "p", 
+sum(if(R = "A",1,0)) as "w", 
+sum(if(R = "D",1,0)) as "d", 
+sum(if(R = "H",1,0)) as "l" from `Teams`.`TEAMNAME` where A_Team="TEAMNAME" and (KO between 'YYYY-MM-DD' and 'YYYY-MM-TT')) as agames 
+on hgames.t = agames.t;

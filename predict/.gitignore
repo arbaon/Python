@@ -1,0 +1,7 @@
+*.csv
+*.pyc
+*.swp
+*.sql
+data/teams
+data/2017_team_search
+data/2018_team_search

@@ -1,0 +1,91 @@
+#!/bin/bash
+ALTN=""
+ARGC=$#
+TS="../data/2017_team_search"
+TSF=$TS"/all_teams"
+if [ ! -d $TS ]; then mkdir $TS; fi
+if [ ! -f $TSF ]; then
+	cat ../data/teams | awk -F',' '{print $11","$1}' | grep -wv "NA" | grep -v lg1 | sort >> $TSF
+fi	
+function return_team {
+	if [ ! -f $TS/$1 ]; then
+		cat $TSF | grep $1 | cut -d',' -f2 > $TS/$1
+	fi
+    # Count the matches of the first and second and both
+	
+	if [ $ARGC -gt 2 ]; then
+		SNCOUNT=$(grep -i $3 $TS/$1 | wc -l)
+		SNSCOUNT=$(grep -i " $3" $TS/$1 | wc -l)
+		ALCOUNT=$(grep -i "$2 $3" $TS/$1 | wc -l)
+	else
+		ALCOUNT=0
+		SNCOUNT=0
+		SNSCOUNT=0
+	fi
+	FSCOUNT=$(grep -i $2 $TS/$1 | wc -l)
+
+	if [ $ALCOUNT -lt 1 ]; then
+		if [ $FSCOUNT -lt 1 ]; then # check first
+			if [ $SNCOUNT -lt 1 ];then # check second
+				RESULT="NULL" # no match
+			else
+				if [ $SNSCOUNT -gt 0 ] && [ $SNSCOUNT -lt $SNCOUNT ]; then # is the space better?
+					RESULT=$(grep -i " $3" $TS/$1 | head -n 1) # yes (first match)
+				else
+					RESULT=$(grep -i $3 $TS/$1 | head -n 1) # no (first match)
+				fi
+			fi
+		else
+			if [ $FSCOUNT -gt 1 ];then # check first * second
+				if [ $SNCOUNT -gt 0 ]; then # more than one of the first
+					if [ $SNCOUNT -lt $FSCOUNT ]; then # more than one of the second
+						if [ $SNSCOUNT -gt 0 ] && [ $SNSCOUNT -lt $SNCOUNT ]; then #is the space better?
+							RESULT=$(grep -i " $3" $TS/$1 | head -n 1) # yes
+						else 
+							RESULT=$(grep -i $3 $TS/$1 | head -n 1) # no
+						fi
+					else
+						if [ $SNSCOUNT -gt 0 ] && [ $SNSCOUNT -lt $FSCOUNT ]; then # is 2ndspace better?
+							RESULT=$(grep -i " $3" $TS/$1 | head -n 1) #yes
+						else
+							RESULT=$(grep -i $2 $TS/$1 | head -n 1) # no
+						fi
+						
+					fi
+				else
+					RESULT=$(grep -i $2 $TS/$1 | head -n 1) # No second take the first
+				fi
+			else
+				RESULT=$(grep -i $2 $TS/$1 | head -n 1) # take the first match
+			fi
+		fi
+	else
+		RESULT=$(grep -i "$2 $3" $TS/$1 | head -n 1) # take the first match for both
+	fi
+	#echo $FSCOUNT "first"	
+	#echo $SNCOUNT "second"
+	#echo $SNSCOUNT "second + space"
+	#echo $ALCOUNT "both"
+    echo $RESULT
+}
+function check_alt_names {
+  if [ $(echo $2 | grep -i "wolverhampton" | wc -l) -eq 1 ]; then ALTN="Wolves"; fi
+  if [ $(echo $2 | grep -i "peterborough" | wc -l) -eq 1 ]; then ALTN="Peterboro"; fi
+  if [ $(echo $2 | grep -i "nuernberg" | wc -l) -eq 1 ]; then ALTN="Nurnburg"; fi
+  if [ $(echo $2 | grep -i "VVV-venlo" | wc -l) -eq 1 ]; then ALTN="VVV Venlo"; fi
+  if [ $(echo "$2 $3" | grep -i "Queens Park" | wc -l) -eq 1 ]; then ALTN="QPR"; fi
+  if [ $(echo "$2 $3" | grep -i "Bayer Leverkusen" | wc -l) -eq 1 ]; then ALTN="Leverkusen"; fi
+  if [ $(echo "$2 $3" | grep -i "Moenchengladbach" | wc -l) -eq 1 ]; then ALTN="Mgladbach"; fi
+  if [ $(echo "$2 $3" | grep -i "Royal Excel" | wc -l) -eq 1 ]; then ALTN="Mouscron"; fi
+}
+
+if [ $ARGC -gt 0 ]; then
+    check_alt_names $@
+    if [ "$ALTN" != "" ]; then
+    	echo $ALTN
+    else
+	return_team $@
+    fi
+else    	
+	echo "No team entered"
+fi

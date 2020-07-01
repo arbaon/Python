@@ -1,0 +1,15 @@
+SQLCOMM
+select 
+any_value(dvn) as Dvn,
+"TEAMNAME" as Team,
+if((sum(hwt)*3+sum(hdt))=0,0,(sum(hwt)*3+sum(hdt))/(sum(hwt)+sum(hdt)+sum(hlt))) as hpt,
+if((sum(hwm)*3+sum(hdm))=0,0,(sum(hwm)*3+sum(hdm))/(sum(hwm)+sum(hdm)+sum(hlm))) as hpm, 
+if((sum(hwb)*3+sum(hdb))=0,0,(sum(hwb)*3+sum(hdb))/(sum(hwb)+sum(hdb)+sum(hlb))) as hpb,
+if((sum(awt)*3+sum(adt))=0,0,(sum(awt)*3+sum(adt))/(sum(awt)+sum(adt)+sum(alt))) as apt,
+if((sum(awm)*3+sum(adm))=0,0,(sum(awm)*3+sum(adm))/(sum(awm)+sum(adm)+sum(alm))) as apm, 
+if((sum(awb)*3+sum(adb))=0,0,(sum(awb)*3+sum(adb))/(sum(awb)+sum(adb)+sum(alb))) as apb 
+from (
+select * from LAST_YEAR_perform_table where Team="TEAMNAME" 
+union 
+select * from CURR_YEAR_perform_table where Team="TEAMNAME"
+) as merge;

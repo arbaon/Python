@@ -1,0 +1,33 @@
+SQLCOMM
+select
+"DIVN" as Dvn, 
+"TEAMNAME" as team,
+count(case when result = "W" and Fixture = "H" and Pos < TOP + 1 then 1 end) as hwt,
+count(case when result = "W" and Fixture = "H" and Pos > TOP and Pos < MID + 1 then 1 end) as hwm,
+count(case when Result = "W" and Fixture = "H" and Pos > MID then 1 end) as hwb,
+count(case when result = "D" and Fixture = "H" and Pos < TOP + 1 then 1 end) as hdt,
+count(case when result = "D" and Fixture = "H" and Pos > TOP and Pos < MID + 1 then 1 end) as hdm,
+count(case when Result = "D" and Fixture = "H" and Pos > MID then 1 end) as hdb,
+count(case when result = "L" and Fixture = "H" and Pos < TOP + 1 then 1 end) as hlt,
+count(case when result = "L" and Fixture = "H" and Pos > TOP and Pos < MID + 1 then 1 end) as hlm,
+count(case when Result = "L" and Fixture = "H" and Pos > MID then 1 end) as hlb,
+count(case when result = "W" and Fixture = "A" and Pos < TOP + 1 then 1 end) as awt,
+count(case when result = "W" and Fixture = "A" and Pos > TOP and Pos < MID + 1 then 1 end) as awm,
+count(case when Result = "W" and Fixture = "A" and Pos > MID then 1 end) as awb,
+count(case when result = "D" and Fixture = "A" and Pos < TOP + 1 then 1 end) as adt,
+count(case when result = "D" and Fixture = "A" and Pos > TOP and Pos < MID + 1 then 1 end) as adm,
+count(case when Result = "D" and Fixture = "A" and Pos > MID then 1 end) as adb,
+count(case when result = "L" and Fixture = "A" and Pos < TOP + 1 then 1 end) as alt,
+count(case when result = "L" and Fixture = "A" and Pos > TOP and Pos < MID + 1 then 1 end) as alm,
+count(case when Result = "L" and Fixture = "A" and Pos > MID then 1 end) as alb
+from
+(
+SELECT KO,ONE.Team,Fixture,Result,TWO.Pos from 
+(select KO,
+if(H_Team != "TEAMNAME",H_Team,A_Team) as Team,
+if(A_Team = "TEAMNAME","A","H") as Fixture,
+if(R = "A" AND A_Team = "TEAMNAME","W",
+if(R = "H" AND H_Team = "TEAMNAME","W",
+if(R ="D","D","L"))) as Result from `TEAMNAME` 
+where KO between 'YYYY-MM-DD' and 'YYYY-MM-TT') as ONE 
+left join Leagues.LEAGUE_TABLE as TWO on ONE.Team = TWO.Team where TWO.Team = ONE.Team order by ONE.KO) as THREE

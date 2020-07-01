@@ -1,0 +1,18 @@
+select 
+any_value(Dvn) as Dvn,
+any_value(team) as team,
+sum(awt) as awt, 
+sum(awm) as awm, 
+sum(awb) as awb,
+sum(adt) as adt, 
+sum(adm) as adm, 
+sum(adb) as adb,
+sum(alt) as alt, 
+sum(alm) as alm, 
+sum(alb) as alb,
+sum(gms) as gms
+from (
+select *, awt+awm+awb+adt+adm+adb+alt+alm+alb as gms from YEAR1_perform_table where team="TEAMNAME" union 
+select *, awt+awm+awb+adt+adm+adb+alt+alm+alb as gms from YEAR2_perform_table where team="TEAMNAME" union 
+select *, awt+awm+awb+adt+adm+adb+alt+alm+alb as gms from YEAR3_perform_table where team="TEAMNAME"
+) as perf;

@@ -1,0 +1,32 @@
+SQLCOMM
+select dv,
+"TEAMNAME" as team,
+no as games,
+if(sh = 0, 0,round(sh/no)) as Shots,
+if(st = 0, 0,round(st/no)) as Shots_t,
+if(gl = 0, 0,gl/no) as Goals_f,
+if(sa = 0, 0,round(sa/no)) as Shots_a,
+if(sat = 0, 0,round(sat/no)) as Shots_at,
+if(gla = 0, 0,gla/no) as Goals_a,
+if(st = 0, 0,round((st/sh)*100)) as "pc_Shots_t",
+if(st = 0, 0,round((gl/st)*100)) as "pc_Goals_t"
+from (
+select count(*) as no,
+any_value(dvn) as dv,
+sum(Shots) as sh,
+sum(shott) as st,
+sum(goals) as gl,
+sum(shota) as sa,
+sum(shotat) as sat,
+sum(goala) as gla
+from (
+select
+any_value(divn) as dvn,
+if(H_Team="TEAMNAME",H_S,A_S) as shots,
+if(H_Team="TEAMNAME",H_T,A_T) as shott,
+if(H_Team="TEAMNAME",F,A) as goals,
+if(H_Team="TEAMNAME",A_S,H_S) as shota,
+if(H_Team="TEAMNAME",A_T,H_T) shotat,
+if(H_Team="TEAMNAME",A,F) as goala
+from (
+select * from `Teams`.`TEAMNAME` where H_Team="TEAMNAME" and (KO between 'YYYY-MM-DD' and 'YYYY-MM-TT') order by KO desc) as HT) as TB) as NB;

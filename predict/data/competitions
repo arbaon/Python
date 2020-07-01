@@ -1,0 +1,23 @@
+CID,ShortName,LongName,Country,Members,Promoted,Relegated,Template,Starts
+B1,jupiler,Jupiler Pro,Belgium,16,0,2,2,07-07
+D1,bundesliga,Bundesliga,Germany,18,0,2,1,07-07
+D2,bundesliga2,Bundesliga 2,Germany,18,3,3,2,07-07
+E0,epremier,Premier,England,20,0,3,1,07-07
+E1,echampionship,Championship,England,24,3,3,1,07-07
+E2,edivone,Division One,England,24,3,4,1,07-07
+E3,edivtwo,Division Two,England,24,4,2,1,07-07
+EC,conference,Conference,England,24,2,4,3,07-07
+F1,ligue1,Ligue 1,France,20,3,3,1,07-07
+F2,ligue2,Ligue 2,France,20,3,3,2,07-07
+G1,superleague,Super League,Greece,16,0,2,2,07-07
+I1,seriea,Serie A,Italy,20,0,3,1,07-07
+I2,serieb,Serie B,Italy,22,3,4,2,07-07
+N1,eredivisie,Eredivisie,Holand,18,0,2,2,07-07
+P1,primeira,Primeira,Portugal,18,0,2,2,07-07
+SC0,spremier,Premier,Scotland,12,0,2,1,07-07
+SC1,schampionship,Championship,Scotland,10,2,2,2,07-07
+SC2,sdivone,Division One,Scotland,10,2,2,2,07-07
+SC3,sdivtwo,Division Two,Scotland,10,2,2,2,07-07
+SP1,laliga,La Liga,Spain,20,0,3,1,07-07
+SP2,segunda,Segunda,Spain,22,3,3,2,07-07
+T1,superlig,Super Lig,Turkey,18,0,3,2,07-07

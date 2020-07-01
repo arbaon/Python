@@ -1,0 +1,18 @@
+select
+any_value(Dvn) as Dvn,
+any_value(team) as team, 
+sum(hwt) as hwt, 
+sum(hwm) as hwm, 
+sum(hwb) as hwb,
+sum(hdt) as hdt, 
+sum(hdm) as hdm, 
+sum(hdb) as hdb,
+sum(hlt) as hlt, 
+sum(hlm) as hlm, 
+sum(hlb) as hlb,
+sum(gms) as gms
+from (
+select *, hwt+hwm+hwb+hdt+hdm+hdb+hlt+hlm+hlb as gms from YEAR1_perform_table where team="TEAMNAME" union 
+select *, hwt+hwm+hwb+hdt+hdm+hdb+hlt+hlm+hlb as gms from YEAR2_perform_table where team="TEAMNAME" union 
+select *, hwt+hwm+hwb+hdt+hdm+hdb+hlt+hlm+hlb as gms from YEAR3_perform_table where team="TEAMNAME"
+) as perf;

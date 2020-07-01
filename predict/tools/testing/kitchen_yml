@@ -1,0 +1,42 @@
+---
+driver:
+  name: docker
+  use_sudo: false
+
+provisioner:
+  name: puppet_apply
+  puppet_environment: master
+  require_puppet_collections: true
+  puppet_yum_collections_repo: "https://yum.puppetlabs.com/puppetlabs-release-pc1-el-7.noarch.rpm"
+  puppet_version: '1.8.2-1.el7'
+  require_chef_for_busser: false
+  hiera_data_path: hiera
+  hiera_config_path: test/hiera.yaml
+  modules_path: 'modules:site:$basemodulepath'
+  manifests_path: manifests
+  custom_options: '--hiera_config /tmp/kitchen/hiera.yaml'
+  install_custom_facts: true
+  require_puppet_repo: true
+  custom_pre_apply_command: |
+    sudo -s <<PREP
+    mkdir -p /etc/facter/facts.d/
+    cat >/etc/facter/facts.d/instance_classification.yaml <<EOL
+    ---
+    instance_tier: dev
+    instance_role: logstash
+    EOL
+    PREP
+
+platforms:
+  - name: centos
+
+verifier:
+  name: serverspec
+
+suites:
+  - name: default
+    custom_facts:
+      instance_tier: 'dev'
+      instance_role: 'logstash'
+    verifier:
+      default_pattern: true    

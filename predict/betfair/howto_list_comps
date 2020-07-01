@@ -1,0 +1,3 @@
+./test3.py "70c0Kf3uqKPDphzJMevPTZpArZLlOxsEXqJr5LR259M=" | jq -r '.[] | .competitionRegion +" "+.competition.id +" "+.competition.name'
+ ./04_marketbook.py "70c0Kf3uqKPDphzJMevPTZpArZLlOxsEXqJr5LR259M=" | jq '.[].event | .name+" "+.id'
+ ./03_listfootballcompetitions.py cSsOdzEGCeCgoWEFnXlA8SR3aDvz4zxJ7NwXgTCps90= | jq -r '.[].competition | [.id, .name ] | @csv'
